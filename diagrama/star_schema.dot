@@ -1,0 +1,87 @@
+digraph star {
+  graph [bgcolor="white", fontname="Segoe UI", pad=0.3, splines=true];
+  node  [shape=plaintext, fontname="Segoe UI", fontsize=11];
+  edge  [color="#5B6B7A", penwidth=1.6, arrowhead=crow, arrowtail=none, dir=forward];
+
+  fvendas [pos="0,0!", label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5" COLOR="#1F3A5F">
+      <TR><TD BGCOLOR="#1F3A5F" COLSPAN="2"><FONT COLOR="white" POINT-SIZE="13"><B>F_Vendas</B></FONT></TD></TR>
+            <TR><TD ALIGN="LEFT" BGCOLOR="#EAF0F7">PK</TD><TD ALIGN="LEFT" BGCOLOR="#EAF0F7">SK_ID</TD></TR>
+      <TR><TD ALIGN="LEFT">FK</TD><TD ALIGN="LEFT">ID_Produto</TD></TR>
+      <TR><TD ALIGN="LEFT"></TD><TD ALIGN="LEFT">Produto</TD></TR>
+      <TR><TD ALIGN="LEFT"></TD><TD ALIGN="LEFT">Units Sold</TD></TR>
+      <TR><TD ALIGN="LEFT"></TD><TD ALIGN="LEFT">Sale Price</TD></TR>
+      <TR><TD ALIGN="LEFT"></TD><TD ALIGN="LEFT">Discount Band</TD></TR>
+      <TR><TD ALIGN="LEFT"></TD><TD ALIGN="LEFT">Segment</TD></TR>
+      <TR><TD ALIGN="LEFT"></TD><TD ALIGN="LEFT">Country</TD></TR>
+      <TR><TD ALIGN="LEFT">Σ</TD><TD ALIGN="LEFT">Sales</TD></TR>
+      <TR><TD ALIGN="LEFT">Σ</TD><TD ALIGN="LEFT">Profit</TD></TR>
+      <TR><TD ALIGN="LEFT">FK</TD><TD ALIGN="LEFT">Date</TD></TR>
+    </TABLE>>];
+  dprodutos [pos="-5.6,2.6!", label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5" COLOR="#2E7D5B">
+      <TR><TD BGCOLOR="#2E7D5B" COLSPAN="2"><FONT COLOR="white" POINT-SIZE="13"><B>D_Produtos</B></FONT></TD></TR>
+            <TR><TD ALIGN="LEFT" BGCOLOR="#EAF5EF">PK</TD><TD ALIGN="LEFT" BGCOLOR="#EAF5EF">ID_Produto</TD></TR>
+      <TR><TD ALIGN="LEFT"></TD><TD ALIGN="LEFT">Produto</TD></TR>
+      <TR><TD ALIGN="LEFT"></TD><TD ALIGN="LEFT">Média de Unidades Vendidas</TD></TR>
+      <TR><TD ALIGN="LEFT"></TD><TD ALIGN="LEFT">Média do Valor de Vendas</TD></TR>
+      <TR><TD ALIGN="LEFT"></TD><TD ALIGN="LEFT">Mediana do Valor de Vendas</TD></TR>
+      <TR><TD ALIGN="LEFT"></TD><TD ALIGN="LEFT">Valor Máximo de Venda</TD></TR>
+      <TR><TD ALIGN="LEFT"></TD><TD ALIGN="LEFT">Valor Mínimo de Venda</TD></TR>
+    </TABLE>>];
+  dprodutosdetalhes [pos="-5.6,-2.6!", label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5" COLOR="#2E7D5B">
+      <TR><TD BGCOLOR="#2E7D5B" COLSPAN="2"><FONT COLOR="white" POINT-SIZE="13"><B>D_Produtos_Detalhes</B></FONT></TD></TR>
+            <TR><TD ALIGN="LEFT" BGCOLOR="#EAF5EF">PK</TD><TD ALIGN="LEFT" BGCOLOR="#EAF5EF">SK_ID</TD></TR>
+      <TR><TD ALIGN="LEFT"></TD><TD ALIGN="LEFT">ID_Produto</TD></TR>
+      <TR><TD ALIGN="LEFT"></TD><TD ALIGN="LEFT">Discount Band</TD></TR>
+      <TR><TD ALIGN="LEFT"></TD><TD ALIGN="LEFT">Sale Price</TD></TR>
+      <TR><TD ALIGN="LEFT"></TD><TD ALIGN="LEFT">Units Sold</TD></TR>
+      <TR><TD ALIGN="LEFT"></TD><TD ALIGN="LEFT">Manufacturing Price</TD></TR>
+    </TABLE>>];
+  ddescontos [pos="5.6,2.8!", label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5" COLOR="#2E7D5B">
+      <TR><TD BGCOLOR="#2E7D5B" COLSPAN="2"><FONT COLOR="white" POINT-SIZE="13"><B>D_Descontos</B></FONT></TD></TR>
+            <TR><TD ALIGN="LEFT" BGCOLOR="#EAF5EF">PK</TD><TD ALIGN="LEFT" BGCOLOR="#EAF5EF">SK_ID</TD></TR>
+      <TR><TD ALIGN="LEFT"></TD><TD ALIGN="LEFT">ID_Produto</TD></TR>
+      <TR><TD ALIGN="LEFT"></TD><TD ALIGN="LEFT">Discount</TD></TR>
+      <TR><TD ALIGN="LEFT"></TD><TD ALIGN="LEFT">Discount Band</TD></TR>
+    </TABLE>>];
+  ddetalhes [pos="5.6,-2.4!", label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5" COLOR="#2E7D5B">
+      <TR><TD BGCOLOR="#2E7D5B" COLSPAN="2"><FONT COLOR="white" POINT-SIZE="13"><B>D_Detalhes</B></FONT></TD></TR>
+            <TR><TD ALIGN="LEFT" BGCOLOR="#EAF5EF">PK</TD><TD ALIGN="LEFT" BGCOLOR="#EAF5EF">SK_ID</TD></TR>
+      <TR><TD ALIGN="LEFT"></TD><TD ALIGN="LEFT">Segment</TD></TR>
+      <TR><TD ALIGN="LEFT"></TD><TD ALIGN="LEFT">Country</TD></TR>
+      <TR><TD ALIGN="LEFT"></TD><TD ALIGN="LEFT">Gross Sales</TD></TR>
+      <TR><TD ALIGN="LEFT"></TD><TD ALIGN="LEFT">COGS</TD></TR>
+      <TR><TD ALIGN="LEFT"></TD><TD ALIGN="LEFT">Month Number</TD></TR>
+      <TR><TD ALIGN="LEFT"></TD><TD ALIGN="LEFT">Month Name</TD></TR>
+      <TR><TD ALIGN="LEFT"></TD><TD ALIGN="LEFT">Year</TD></TR>
+    </TABLE>>];
+  dcalendário [pos="0,-4.9!", label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5" COLOR="#B8641B">
+      <TR><TD BGCOLOR="#B8641B" COLSPAN="2"><FONT COLOR="white" POINT-SIZE="13"><B>D_Calendário</B></FONT><BR/><FONT COLOR="white" POINT-SIZE="9">tabela calculada: CALENDAR()</FONT></TD></TR>
+            <TR><TD ALIGN="LEFT" BGCOLOR="#FBEFE4">PK</TD><TD ALIGN="LEFT" BGCOLOR="#FBEFE4">Date</TD></TR>
+      <TR><TD ALIGN="LEFT"></TD><TD ALIGN="LEFT">Ano · Mês · Nome do Mês · Mês Abreviado</TD></TR>
+      <TR><TD ALIGN="LEFT"></TD><TD ALIGN="LEFT">Ano-Mês · Trimestre · Semestre</TD></TR>
+      <TR><TD ALIGN="LEFT"></TD><TD ALIGN="LEFT">Dia · Dia da Semana · Nome do Dia</TD></TR>
+    </TABLE>>];
+  financialsorigem [pos="0,4.6!", label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5" COLOR="#7A7A7A">
+      <TR><TD BGCOLOR="#7A7A7A" COLSPAN="2"><FONT COLOR="white" POINT-SIZE="13"><B>financials_origem</B></FONT><BR/><FONT COLOR="white" POINT-SIZE="9">oculta (backup da tabela original)</FONT></TD></TR>
+            <TR><TD ALIGN="LEFT"></TD><TD ALIGN="LEFT">Segment · Country · Product · Discount Band</TD></TR>
+      <TR><TD ALIGN="LEFT"></TD><TD ALIGN="LEFT">Units Sold · Manufacturing Price · Sale Price</TD></TR>
+      <TR><TD ALIGN="LEFT"></TD><TD ALIGN="LEFT">Gross Sales · Discounts · Sales · COGS · Profit</TD></TR>
+      <TR><TD ALIGN="LEFT"></TD><TD ALIGN="LEFT">Date · Month Number · Month Name · Year</TD></TR>
+    </TABLE>>];
+
+  dprodutos -> fvendas [label="ID_Produto (*:1)", fontsize=9, fontcolor="#5B6B7A"];
+  dprodutosdetalhes -> fvendas [label="SK_ID (1:1, filtro bidirecional)", fontsize=9, fontcolor="#5B6B7A"];
+  ddescontos -> fvendas [label="SK_ID (1:1, filtro bidirecional)", fontsize=9, fontcolor="#5B6B7A"];
+  ddetalhes -> fvendas [label="SK_ID (1:1, filtro bidirecional)", fontsize=9, fontcolor="#5B6B7A"];
+  dcalendário -> fvendas [label="Date (*:1)", fontsize=9, fontcolor="#5B6B7A"];
+  financialsorigem -> fvendas [style=dashed, arrowhead=none, color="#9A9A9A", label="referência no Power Query (sem relacionamento)", fontsize=9, fontcolor="#7A7A7A"];
+  financialsorigem -> dprodutos [style=dashed, arrowhead=none, color="#9A9A9A"];
+  financialsorigem -> ddescontos [style=dashed, arrowhead=none, color="#9A9A9A"];
+}
