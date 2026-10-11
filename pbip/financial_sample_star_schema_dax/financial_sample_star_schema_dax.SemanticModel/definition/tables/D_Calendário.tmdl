@@ -1,0 +1,104 @@
+table 'D_Calendário'
+	lineageTag: f4de438f-5d41-4b0d-b9e3-24de73250c60
+
+	column Date
+		dataType: dateTime
+		isNameInferred
+		isDataTypeInferred
+		formatString: dd/MM/yyyy
+		lineageTag: 8782d4d5-2450-41c3-84a4-c93f559741e7
+		summarizeBy: none
+		sourceColumn: [Date]
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column Ano = YEAR([Date])
+		dataType: int64
+		isDataTypeInferred
+		lineageTag: d62cbf25-32da-4f9f-aa8a-49f0faeeb40c
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Mês' = MONTH([Date])
+		dataType: int64
+		isDataTypeInferred
+		lineageTag: 7a2c54a0-da96-4a45-aff8-3f045caded41
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Nome do Mês' = FORMAT([Date], "MMMM")
+		dataType: string
+		isDataTypeInferred
+		lineageTag: b83d5f7b-142e-44cd-b101-446a4869650e
+		summarizeBy: none
+		sortByColumn: 'Mês'
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Mês Abreviado' = FORMAT([Date], "MMM")
+		dataType: string
+		isDataTypeInferred
+		lineageTag: 2bfcd686-6aa8-4c09-baf8-7131abbd5e94
+		summarizeBy: none
+		sortByColumn: 'Mês'
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Ano-Mês' = FORMAT([Date], "yyyy-MM")
+		dataType: string
+		isDataTypeInferred
+		lineageTag: 94b24700-efac-4de6-87c6-6f539de552dd
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column Trimestre = "T" & FORMAT([Date], "Q")
+		dataType: string
+		isDataTypeInferred
+		lineageTag: 6bb906c9-efb9-42c6-aa61-e48884366826
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column Semestre = IF(MONTH([Date]) <= 6, 1, 2)
+		dataType: int64
+		isDataTypeInferred
+		lineageTag: c6530cc3-8d9f-4711-9fad-3bf44d7b8661
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column Dia = DAY([Date])
+		dataType: int64
+		isDataTypeInferred
+		lineageTag: b86d152d-454c-4e2b-a309-b1a6ddfc1c08
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Dia da Semana' = WEEKDAY([Date], 2)
+		dataType: int64
+		isDataTypeInferred
+		lineageTag: 28f74587-3212-444f-8712-3c8dfefaf558
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Nome do Dia' = FORMAT([Date], "dddd")
+		dataType: string
+		isDataTypeInferred
+		lineageTag: a66e1277-9fc3-4bb5-b0e9-dc059621787d
+		summarizeBy: none
+		sortByColumn: 'Dia da Semana'
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'D_Calendário' = calculated
+		mode: import
+		source = CALENDAR(DATE(YEAR(MIN(F_Vendas[Date])), 1, 1), DATE(YEAR(MAX(F_Vendas[Date])), 12, 31))
+
+	annotation PBI_Id = c24d3812e2992e45282a

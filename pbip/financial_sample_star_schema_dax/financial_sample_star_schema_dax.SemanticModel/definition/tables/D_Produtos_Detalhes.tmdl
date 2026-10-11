@@ -1,0 +1,66 @@
+table D_Produtos_Detalhes
+	lineageTag: fd06f9f6-d272-4248-a083-1ef21cd0c151
+
+	column SK_ID
+		dataType: int64
+		lineageTag: a080c6a5-2dec-495a-b5b6-7e6e8820e3bd
+		summarizeBy: none
+		sourceColumn: SK_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column ID_Produto
+		dataType: int64
+		lineageTag: 56a68b41-de28-423c-bfd3-9898efe8b3b5
+		summarizeBy: none
+		sourceColumn: ID_Produto
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Discount Band'
+		dataType: string
+		lineageTag: 45b61df2-7dea-4b64-96d1-b5ac2e1c5d3a
+		summarizeBy: none
+		sourceColumn: Discount Band
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Sale Price'
+		dataType: double
+		lineageTag: de0d0fc5-8c50-40ea-8832-652e83e2c328
+		summarizeBy: sum
+		sourceColumn: Sale Price
+
+		annotation SummarizationSetBy = User
+
+	column 'Units Sold'
+		dataType: double
+		lineageTag: c938c68d-1027-45d3-9c7f-e05880b91b2e
+		summarizeBy: sum
+		sourceColumn: Units Sold
+
+		annotation SummarizationSetBy = User
+
+	column 'Manufacturing Price'
+		dataType: int64
+		formatString: 0
+		lineageTag: b1d117b7-5b0f-43b0-865f-b8a2cb8f1137
+		summarizeBy: sum
+		sourceColumn: Manufacturing Price
+
+		annotation SummarizationSetBy = User
+
+	partition D_Produtos_Detalhes = m
+		mode: import
+		source =
+				let
+				    Fonte = financials_origem,
+				    // SK_ID: índice sequencial que identifica cada venda da tabela original (mesma ordem em todas as tabelas)
+				    #"Índice Adicionado" = Table.AddIndexColumn(Fonte, "SK_ID", 0, 1, Int64.Type),
+				    #"Coluna Condicional Adicionada" = Table.AddColumn(#"Índice Adicionado", "ID_Produto", each if [Product] = "Carretera" then 0 else if [Product] = "Montana" then 1 else if [Product] = "Paseo" then 2 else if [Product] = "Velo" then 3 else if [Product] = "VTT" then 4 else if [Product] = "Amarilla" then 5 else null, Int64.Type),
+				    #"Outras Colunas Removidas" = Table.SelectColumns(#"Coluna Condicional Adicionada", {"SK_ID", "ID_Produto", "Discount Band", "Sale Price", "Units Sold", "Manufacturing Price"}),
+				    #"Colunas Reordenadas" = Table.ReorderColumns(#"Outras Colunas Removidas", {"SK_ID", "ID_Produto", "Discount Band", "Sale Price", "Units Sold", "Manufacturing Price"})
+				in
+				    #"Colunas Reordenadas"
+
+	annotation PBI_ResultType = Table

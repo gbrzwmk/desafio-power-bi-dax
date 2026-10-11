@@ -1,0 +1,82 @@
+table D_Detalhes
+	lineageTag: 94a6300c-2dbb-4762-a652-3995570f0cbe
+
+	column SK_ID
+		dataType: int64
+		lineageTag: 8c07985b-796b-4a00-82f6-f33dda1101aa
+		summarizeBy: none
+		sourceColumn: SK_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column Segment
+		dataType: string
+		lineageTag: abf0ca69-536e-416b-802d-5ebbc6125190
+		summarizeBy: none
+		sourceColumn: Segment
+
+		annotation SummarizationSetBy = Automatic
+
+	column Country
+		dataType: string
+		lineageTag: d111eb37-49f0-48d4-b683-2b6246103a2b
+		summarizeBy: none
+		sourceColumn: Country
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Gross Sales'
+		dataType: double
+		lineageTag: cc3136d8-ac73-4c8c-a5be-6d6b8016e14d
+		summarizeBy: sum
+		sourceColumn: Gross Sales
+
+		annotation SummarizationSetBy = User
+
+	column COGS
+		dataType: double
+		lineageTag: a4e15158-461c-46e0-990e-f5945b48368e
+		summarizeBy: sum
+		sourceColumn: COGS
+
+		annotation SummarizationSetBy = User
+
+	column 'Month Number'
+		dataType: int64
+		lineageTag: d4042c36-f000-4eb0-bce2-40c658780d0a
+		summarizeBy: none
+		sourceColumn: Month Number
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Month Name'
+		dataType: string
+		lineageTag: d7c6f4e2-ec1e-47d7-999c-8f1c68916d08
+		summarizeBy: none
+		sourceColumn: Month Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column Year
+		dataType: int64
+		lineageTag: b036d9dd-ddf1-479f-9eb2-80e62c273105
+		summarizeBy: none
+		sourceColumn: Year
+
+		annotation SummarizationSetBy = Automatic
+
+	partition D_Detalhes = m
+		mode: import
+		source =
+				let
+				    Fonte = financials_origem,
+				    // SK_ID: índice sequencial que identifica cada venda da tabela original (mesma ordem em todas as tabelas)
+				    #"Índice Adicionado" = Table.AddIndexColumn(Fonte, "SK_ID", 0, 1, Int64.Type),
+				    #"Coluna Condicional Adicionada" = Table.AddColumn(#"Índice Adicionado", "ID_Produto", each if [Product] = "Carretera" then 0 else if [Product] = "Montana" then 1 else if [Product] = "Paseo" then 2 else if [Product] = "Velo" then 3 else if [Product] = "VTT" then 4 else if [Product] = "Amarilla" then 5 else null, Int64.Type),
+				    // Detalhes não contemplados nas outras dimensões: segmento, país, vendas brutas, custo (COGS) e os campos de mês/ano da origem
+				    #"Outras Colunas Removidas" = Table.SelectColumns(#"Coluna Condicional Adicionada", {"SK_ID", "Segment", "Country", "Gross Sales", "COGS", "Month Number", "Month Name", "Year"}),
+				    #"Colunas Reordenadas" = Table.ReorderColumns(#"Outras Colunas Removidas", {"SK_ID", "Segment", "Country", "Gross Sales", "COGS", "Month Number", "Month Name", "Year"})
+				in
+				    #"Colunas Reordenadas"
+
+	annotation PBI_ResultType = Table

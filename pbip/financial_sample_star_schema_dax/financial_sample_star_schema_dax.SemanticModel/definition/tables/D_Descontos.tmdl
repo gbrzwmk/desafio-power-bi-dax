@@ -1,0 +1,50 @@
+table D_Descontos
+	lineageTag: c277af32-08c9-496d-a9fd-1ce996655f23
+
+	column SK_ID
+		dataType: int64
+		lineageTag: b4581e37-8f2f-4949-9d09-dd294e424b92
+		summarizeBy: none
+		sourceColumn: SK_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column ID_Produto
+		dataType: int64
+		lineageTag: 7c55dde1-d5d1-4bd0-87e5-eb8dab163406
+		summarizeBy: none
+		sourceColumn: ID_Produto
+
+		annotation SummarizationSetBy = Automatic
+
+	column Discount
+		dataType: double
+		lineageTag: b0ddb48b-fb1f-491a-850e-2b9943cdc356
+		summarizeBy: sum
+		sourceColumn: Discount
+
+		annotation SummarizationSetBy = User
+
+	column 'Discount Band'
+		dataType: string
+		lineageTag: f20f678d-f4f6-417c-8b39-e336b74acffb
+		summarizeBy: none
+		sourceColumn: Discount Band
+
+		annotation SummarizationSetBy = Automatic
+
+	partition D_Descontos = m
+		mode: import
+		source =
+				let
+				    Fonte = financials_origem,
+				    // SK_ID: índice sequencial que identifica cada venda da tabela original (mesma ordem em todas as tabelas)
+				    #"Índice Adicionado" = Table.AddIndexColumn(Fonte, "SK_ID", 0, 1, Int64.Type),
+				    #"Coluna Condicional Adicionada" = Table.AddColumn(#"Índice Adicionado", "ID_Produto", each if [Product] = "Carretera" then 0 else if [Product] = "Montana" then 1 else if [Product] = "Paseo" then 2 else if [Product] = "Velo" then 3 else if [Product] = "VTT" then 4 else if [Product] = "Amarilla" then 5 else null, Int64.Type),
+				    #"Outras Colunas Removidas" = Table.SelectColumns(#"Coluna Condicional Adicionada", {"SK_ID", "ID_Produto", "Discounts", "Discount Band"}),
+				    #"Colunas Reordenadas" = Table.ReorderColumns(#"Outras Colunas Removidas", {"SK_ID", "ID_Produto", "Discounts", "Discount Band"}),
+				    #"Colunas Renomeadas" = Table.RenameColumns(#"Colunas Reordenadas", {{"Discounts", "Discount"}})
+				in
+				    #"Colunas Renomeadas"
+
+	annotation PBI_ResultType = Table

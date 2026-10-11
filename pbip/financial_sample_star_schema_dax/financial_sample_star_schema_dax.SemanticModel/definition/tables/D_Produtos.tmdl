@@ -1,0 +1,75 @@
+table D_Produtos
+	lineageTag: 6f3f0240-2b37-4817-9b4c-24c269f0441e
+
+	column ID_Produto
+		dataType: int64
+		lineageTag: d8407b1a-0f0b-4752-a634-f16f5f7cc5d8
+		summarizeBy: none
+		sourceColumn: ID_Produto
+
+		annotation SummarizationSetBy = Automatic
+
+	column Produto
+		dataType: string
+		lineageTag: 7401f5ce-2425-475a-8b78-dc3d6baf71d7
+		summarizeBy: none
+		sourceColumn: Produto
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Média de Unidades Vendidas'
+		dataType: double
+		lineageTag: da2d3b3d-9ed2-4a0c-bfd2-1f09ec08693c
+		summarizeBy: none
+		sourceColumn: Média de Unidades Vendidas
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Média do Valor de Vendas'
+		dataType: double
+		lineageTag: 741b324d-85ae-4770-b9db-a1db2b56955d
+		summarizeBy: none
+		sourceColumn: Média do Valor de Vendas
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Mediana do Valor de Vendas'
+		dataType: double
+		lineageTag: bac0d757-b057-4162-bcf7-fcf6f5cb2afc
+		summarizeBy: none
+		sourceColumn: Mediana do Valor de Vendas
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Valor Máximo de Venda'
+		dataType: double
+		lineageTag: 4a807546-4627-4141-baa2-86ac5154ef5f
+		summarizeBy: none
+		sourceColumn: Valor Máximo de Venda
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Valor Mínimo de Venda'
+		dataType: double
+		lineageTag: 258170f9-e6e0-43f7-a75e-be3b78573797
+		summarizeBy: none
+		sourceColumn: Valor Mínimo de Venda
+
+		annotation SummarizationSetBy = Automatic
+
+	partition D_Produtos = m
+		mode: import
+		source =
+				let
+				    Fonte = financials_origem,
+				    // Agrupar por Product (avançado): estatísticas de unidades e de preço de venda por produto
+				    #"Linhas Agrupadas" = Table.Group(Fonte, {"Product"}, {{"Média de Unidades Vendidas", each List.Average([Units Sold]), type nullable number}, {"Média do Valor de Vendas", each List.Average([Sale Price]), type nullable number}, {"Mediana do Valor de Vendas", each List.Median([Sale Price]), type nullable number}, {"Valor Máximo de Venda", each List.Max([Sale Price]), type nullable number}, {"Valor Mínimo de Venda", each List.Min([Sale Price]), type nullable number}}),
+				    // Coluna condicional: índice numérico do produto (chave da dimensão)
+				    #"Coluna Condicional Adicionada" = Table.AddColumn(#"Linhas Agrupadas", "ID_Produto", each if [Product] = "Carretera" then 0 else if [Product] = "Montana" then 1 else if [Product] = "Paseo" then 2 else if [Product] = "Velo" then 3 else if [Product] = "VTT" then 4 else if [Product] = "Amarilla" then 5 else null, Int64.Type),
+				    #"Colunas Reordenadas" = Table.ReorderColumns(#"Coluna Condicional Adicionada", {"ID_Produto", "Product", "Média de Unidades Vendidas", "Média do Valor de Vendas", "Mediana do Valor de Vendas", "Valor Máximo de Venda", "Valor Mínimo de Venda"}),
+				    #"Colunas Renomeadas" = Table.RenameColumns(#"Colunas Reordenadas", {{"Product", "Produto"}}),
+				    #"Linhas Classificadas" = Table.Sort(#"Colunas Renomeadas", {{"ID_Produto", Order.Ascending}})
+				in
+				    #"Linhas Classificadas"
+
+	annotation PBI_ResultType = Table

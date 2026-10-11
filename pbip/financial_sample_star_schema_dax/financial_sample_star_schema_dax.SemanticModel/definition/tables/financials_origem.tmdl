@@ -1,0 +1,149 @@
+table financials_origem
+	lineageTag: ad864c44-e049-448e-8a0a-8c9632ea6928
+	isHidden
+
+	column Segment
+		dataType: string
+		lineageTag: f0e3cd97-2e81-466d-b46c-6e2ba02fdaa1
+		summarizeBy: none
+		sourceColumn: Segment
+
+		annotation SummarizationSetBy = Automatic
+
+	column Country
+		dataType: string
+		lineageTag: f770c226-3266-4a3b-b0cd-e917f7f35634
+		summarizeBy: none
+		sourceColumn: Country
+
+		annotation SummarizationSetBy = Automatic
+
+	column Product
+		dataType: string
+		lineageTag: 4c7d6df0-621a-4f57-a4cc-4132f7108e96
+		summarizeBy: none
+		sourceColumn: Product
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Discount Band'
+		dataType: string
+		lineageTag: 2a7c1880-6a37-4391-9c76-f18a0585a01c
+		summarizeBy: none
+		sourceColumn: Discount Band
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Units Sold'
+		dataType: double
+		lineageTag: 10acff00-4389-4dfc-a54c-b864ef901b93
+		summarizeBy: sum
+		sourceColumn: Units Sold
+
+		annotation SummarizationSetBy = User
+
+	column 'Manufacturing Price'
+		dataType: int64
+		formatString: 0
+		lineageTag: 9a656aaf-d141-4584-8d25-deb354f46a69
+		summarizeBy: sum
+		sourceColumn: Manufacturing Price
+
+		annotation SummarizationSetBy = User
+
+	column 'Sale Price'
+		dataType: double
+		lineageTag: ad8d194a-9892-4396-80dd-b74d960d5a8f
+		summarizeBy: sum
+		sourceColumn: Sale Price
+
+		annotation SummarizationSetBy = User
+
+	column 'Gross Sales'
+		dataType: double
+		lineageTag: 4f596727-10e6-48e6-9680-68b9b52a43ab
+		summarizeBy: sum
+		sourceColumn: Gross Sales
+
+		annotation SummarizationSetBy = User
+
+	column Discounts
+		dataType: double
+		lineageTag: 7b121dc5-4e5a-4a26-918a-669a5af84e6b
+		summarizeBy: sum
+		sourceColumn: Discounts
+
+		annotation SummarizationSetBy = User
+
+	column Sales
+		dataType: double
+		lineageTag: 7b3120df-2f4d-4c86-90d7-d13fb2489191
+		summarizeBy: sum
+		sourceColumn: Sales
+
+		annotation SummarizationSetBy = User
+
+	column COGS
+		dataType: double
+		lineageTag: 0e979cf3-2d16-44b4-b465-325278f845f5
+		summarizeBy: sum
+		sourceColumn: COGS
+
+		annotation SummarizationSetBy = User
+
+	column Profit
+		dataType: double
+		lineageTag: 05da8467-f063-43ff-b9a0-1fe8419521fe
+		summarizeBy: sum
+		sourceColumn: Profit
+
+		annotation SummarizationSetBy = User
+
+	column Date
+		dataType: dateTime
+		formatString: dd/MM/yyyy
+		lineageTag: d84a1d3a-5b8e-4fb2-bff2-9101f3001cee
+		summarizeBy: none
+		sourceColumn: Date
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column 'Month Number'
+		dataType: int64
+		lineageTag: c9a937a6-8c8f-45ef-84a0-12e8677fd139
+		summarizeBy: none
+		sourceColumn: Month Number
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Month Name'
+		dataType: string
+		lineageTag: 9419cf4d-6059-4bdc-9dbe-44096b384309
+		summarizeBy: none
+		sourceColumn: Month Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column Year
+		dataType: int64
+		lineageTag: 0bf64ef7-73ec-48d0-8252-f615d75b1e24
+		summarizeBy: none
+		sourceColumn: Year
+
+		annotation SummarizationSetBy = Automatic
+
+	partition financials_origem = m
+		mode: import
+		source =
+				let
+				    Fonte = Excel.Workbook(File.Contents(PastaDados & "\Financial Sample.xlsx"), null, true),
+				    financials_Table = Fonte{[Item="financials",Kind="Table"]}[Data],
+				    // o cabeçalho original traz " Sales" com espaço à esquerda
+				    #"Nomes de Colunas Aparados" = Table.TransformColumnNames(financials_Table, Text.Trim),
+				    #"Tipo Alterado" = Table.TransformColumnTypes(#"Nomes de Colunas Aparados", {{"Segment", type text}, {"Country", type text}, {"Product", type text}, {"Discount Band", type text}, {"Units Sold", type number}, {"Manufacturing Price", Int64.Type}, {"Sale Price", type number}, {"Gross Sales", type number}, {"Discounts", type number}, {"Sales", type number}, {"COGS", type number}, {"Profit", type number}, {"Date", type date}, {"Month Number", Int64.Type}, {"Month Name", type text}, {"Year", Int64.Type}})
+				in
+				    #"Tipo Alterado"
+
+	annotation PBI_ResultType = Table
