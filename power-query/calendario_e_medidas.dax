@@ -1,0 +1,95 @@
+// Tabela calculada
+D_Calendário =
+CALENDAR(DATE(YEAR(MIN(F_Vendas[Date])), 1, 1), DATE(YEAR(MAX(F_Vendas[Date])), 12, 31))
+
+// Coluna calculada em D_Calendário
+Ano =
+YEAR([Date])
+
+// Coluna calculada em D_Calendário
+Mês =
+MONTH([Date])
+
+// Coluna calculada em D_Calendário
+Nome do Mês =
+FORMAT([Date], "MMMM")
+
+// Coluna calculada em D_Calendário
+Mês Abreviado =
+FORMAT([Date], "MMM")
+
+// Coluna calculada em D_Calendário
+Ano-Mês =
+FORMAT([Date], "yyyy-MM")
+
+// Coluna calculada em D_Calendário
+Trimestre =
+"T" & FORMAT([Date], "Q")
+
+// Coluna calculada em D_Calendário
+Semestre =
+IF(MONTH([Date]) <= 6, 1, 2)
+
+// Coluna calculada em D_Calendário
+Dia =
+DAY([Date])
+
+// Coluna calculada em D_Calendário
+Dia da Semana =
+WEEKDAY([Date], 2)
+
+// Coluna calculada em D_Calendário
+Nome do Dia =
+FORMAT([Date], "dddd")
+
+// Medida em F_Vendas
+Total de Vendas =
+SUM(F_Vendas[Sales])
+
+// Medida em F_Vendas
+Total de Lucro =
+SUM(F_Vendas[Profit])
+
+// Medida em F_Vendas
+Unidades Vendidas =
+SUM(F_Vendas[Units Sold])
+
+// Medida em F_Vendas
+Qtd de Vendas =
+COUNTROWS(F_Vendas)
+
+// Medida em F_Vendas
+Margem de Lucro =
+DIVIDE([Total de Lucro], [Total de Vendas])
+
+// Medida em F_Vendas
+Ticket Médio =
+DIVIDE([Total de Vendas], [Qtd de Vendas])
+
+// Medida em F_Vendas
+Preço Médio de Venda =
+AVERAGE(F_Vendas[Sale Price])
+
+// Medida em F_Vendas
+Total de Descontos =
+SUM(D_Descontos[Discount])
+
+// Medida em F_Vendas
+Vendas Brutas =
+SUM(D_Detalhes[Gross Sales])
+
+// Medida em F_Vendas
+Custo Total (COGS) =
+SUM(D_Detalhes[COGS])
+
+// Medida em F_Vendas
+Vendas Ano Anterior =
+CALCULATE([Total de Vendas], SAMEPERIODLASTYEAR('D_Calendário'[Date]))
+
+// Medida em F_Vendas
+Vendas Acumuladas no Ano =
+TOTALYTD([Total de Vendas], 'D_Calendário'[Date])
+
+// Medida em F_Vendas
+Variação vs Ano Anterior =
+DIVIDE([Total de Vendas] - [Vendas Ano Anterior], [Vendas Ano Anterior])
