@@ -1,0 +1,22 @@
+relationship d76d4330-f144-4bea-b0c1-1fdecb91ce37
+	fromColumn: F_Vendas.ID_Produto
+	toColumn: D_Produtos.ID_Produto
+
+relationship 87b0b125-ec1d-4da0-a6eb-8c9ebd69fe29
+	crossFilteringBehavior: bothDirections
+	fromColumn: F_Vendas.SK_ID
+	toColumn: D_Produtos_Detalhes.SK_ID
+
+relationship c6a53877-7733-4bdb-9721-0dff076ce2ef
+	crossFilteringBehavior: bothDirections
+	fromColumn: F_Vendas.SK_ID
+	toColumn: D_Descontos.SK_ID
+
+relationship 0d464138-a623-4255-bfc1-ea36f17fd374
+	crossFilteringBehavior: bothDirections
+	fromColumn: F_Vendas.SK_ID
+	toColumn: D_Detalhes.SK_ID
+
+relationship 5f2dd97f-1cfb-40f6-a827-688de6a16a3b
+	fromColumn: F_Vendas.Date
+	toColumn: 'D_Calendário'.Date

@@ -1,0 +1,23 @@
+model Model
+	culture: pt-BR
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: pt-BR
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation PBI_QueryOrder = ["PastaDados", "financials_origem", "F_Vendas", "D_Produtos", "D_Produtos_Detalhes", "D_Descontos", "D_Detalhes"]
+
+annotation __PBI_TimeIntelligenceEnabled = 0
+
+annotation PBI_ProTooling = ["DevMode"]
+
+ref table financials_origem
+ref table F_Vendas
+ref table D_Produtos
+ref table D_Produtos_Detalhes
+ref table D_Descontos
+ref table D_Detalhes
+ref table 'D_Calendário'
+
+ref expression PastaDados

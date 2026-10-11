@@ -1,0 +1,6 @@
+expression PastaDados = "C:\Users\gbrz\Downloads\desafio-power-bi-dax\dados" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]
+	lineageTag: 5bc8fbbc-bde5-4099-8164-d8399f767c45
+
+	annotation PBI_ResultType = Text
+
+	annotation PBI_NavigationStepName = Navigation
